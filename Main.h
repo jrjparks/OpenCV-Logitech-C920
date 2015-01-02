@@ -12,7 +12,8 @@
 
 using namespace std;
 
-int Brightness = 128, Contrast = 128, Saturation = 128, Sharpness = 128, Focus = 0;
+int Brightness = 128, Contrast = 128, Saturation = 128, Sharpness = 128, Gain = 0, Focus = 0, BacklightCompensation = 0,
+		WhiteBalanceTemperature = 0;
 
 v4l2::C920Camera camera;
 cv::Mat frame;

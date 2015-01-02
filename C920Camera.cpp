@@ -123,6 +123,18 @@ bool C920Camera::SetSharpness(int &value) {
 	return this->SetControl(this->capture);
 }
 
+bool C920Camera::SetGain(int &value) {
+	this->capture->V4L2Control.id = V4L2_CID_GAIN;
+	this->capture->V4L2Control.value = value;
+	return this->SetControl(this->capture);
+}
+
+bool C920Camera::SetBacklightCompensation(int &value) {
+	this->capture->V4L2Control.id = V4L2_CID_BACKLIGHT_COMPENSATION;
+	this->capture->V4L2Control.value = value;
+	return this->SetControl(this->capture);
+}
+
 bool C920Camera::SetFocus(int &value) {
 	if (value < 0) {
 		this->capture->V4L2Control.id = V4L2_CID_FOCUS_AUTO;
@@ -135,51 +147,108 @@ bool C920Camera::SetFocus(int &value) {
 			this->capture->V4L2Control.id = V4L2_CID_FOCUS_ABSOLUTE;
 			this->capture->V4L2Control.value = value;
 			return this->SetControl(this->capture);
-		} else {
-			return false;
 		}
 	}
+	return false;
+}
+
+bool C920Camera::SetWhiteBalanceTemperature(int &value) {
+	if (value < 0) {
+		this->capture->V4L2Control.id = V4L2_CID_AUTO_WHITE_BALANCE;
+		this->capture->V4L2Control.value = true;
+		return this->SetControl(this->capture);
+	} else {
+		this->capture->V4L2Control.id = V4L2_CID_AUTO_WHITE_BALANCE;
+		this->capture->V4L2Control.value = false;
+		if (this->SetControl(this->capture)) {
+			this->capture->V4L2Control.id = V4L2_CID_WHITE_BALANCE_TEMPERATURE;
+			this->capture->V4L2Control.value = value;
+			return this->SetControl(this->capture);
+		}
+	}
+	return false;
 }
 
 /* Getters for camera properties */
 bool C920Camera::GetBrightness(int &value) {
 	this->capture->V4L2Control.id = V4L2_CID_BRIGHTNESS;
-	this->capture->V4L2Control.value = value;
-	return this->GetControl(this->capture);
+	if (!this->GetControl(this->capture))
+		return false;
+	value = this->capture->V4L2Control.value;
+	return true;
 }
 
 bool C920Camera::GetContrast(int &value) {
 	this->capture->V4L2Control.id = V4L2_CID_CONTRAST;
-	this->capture->V4L2Control.value = value;
-	return this->GetControl(this->capture);
+	if (!this->GetControl(this->capture))
+		return false;
+	value = this->capture->V4L2Control.value;
+	return true;
 }
 
 bool C920Camera::GetSaturation(int &value) {
 	this->capture->V4L2Control.id = V4L2_CID_SATURATION;
-	this->capture->V4L2Control.value = value;
-	return this->GetControl(this->capture);
+	if (!this->GetControl(this->capture))
+		return false;
+	value = this->capture->V4L2Control.value;
+	return true;
 }
 
 bool C920Camera::GetSharpness(int &value) {
 	this->capture->V4L2Control.id = V4L2_CID_SHARPNESS;
-	this->capture->V4L2Control.value = value;
-	return this->GetControl(this->capture);
+	if (!this->GetControl(this->capture))
+		return false;
+	value = this->capture->V4L2Control.value;
+	return true;
+}
+
+bool C920Camera::GetGain(int &value) {
+	this->capture->V4L2Control.id = V4L2_CID_GAIN;
+	if (!this->GetControl(this->capture))
+		return false;
+	value = this->capture->V4L2Control.value;
+	return true;
+}
+
+bool C920Camera::GetBacklightCompensation(int &value) {
+	this->capture->V4L2Control.id = V4L2_CID_BACKLIGHT_COMPENSATION;
+	if (!this->GetControl(this->capture))
+		return false;
+	value = this->capture->V4L2Control.value;
+	return true;
 }
 
 bool C920Camera::GetFocus(int &value) {
 	this->capture->V4L2Control.id = V4L2_CID_FOCUS_AUTO;
-	this->capture->V4L2Control.value = value;
 	if (!this->GetControl(this->capture))
 		return false;
+	value = this->capture->V4L2Control.value;
 	if (value) {
 		value = -1;
 		return true;
 	}
 
 	this->capture->V4L2Control.id = V4L2_CID_FOCUS_ABSOLUTE;
-	this->capture->V4L2Control.value = value;
 	if (!this->GetControl(this->capture))
 		return false;
+	value = this->capture->V4L2Control.value;
+	return true;
+}
+
+bool C920Camera::GetWhiteBalanceTemperature(int &value) {
+	this->capture->V4L2Control.id = V4L2_CID_AUTO_WHITE_BALANCE;
+	if (!this->GetControl(this->capture))
+		return false;
+	value = this->capture->V4L2Control.value;
+	if (value) {
+		value = -1;
+		return true;
+	}
+
+	this->capture->V4L2Control.id = V4L2_CID_WHITE_BALANCE_TEMPERATURE;
+	if (!this->GetControl(this->capture))
+		return false;
+	value = this->capture->V4L2Control.value;
 	return true;
 }
 

@@ -133,13 +133,19 @@ public:
 	bool SetContrast(int &value);
 	bool SetSaturation(int &value);
 	bool SetSharpness(int &value);
+	bool SetGain(int &value);
+	bool SetBacklightCompensation(int &value);
 	bool SetFocus(int &value);
+	bool SetWhiteBalanceTemperature(int &value);
 
 	bool GetBrightness(int &value);
 	bool GetContrast(int &value);
 	bool GetSaturation(int &value);
 	bool GetSharpness(int &value);
+	bool GetGain(int &value);
+	bool GetBacklightCompensation(int &value);
 	bool GetFocus(int &value);
+	bool GetWhiteBalanceTemperature(int &value);
 
 protected:
 	V4L2CameraCapture* capture;

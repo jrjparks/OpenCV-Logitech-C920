@@ -6,17 +6,9 @@
  */
 
 #include "Main.h"
-#include <iostream>
 
 int main(int argc, char* argv[]) {
 	setenv("DISPLAY", ":0", 0);
-
-	cv::namedWindow("Adjustments", CV_WINDOW_NORMAL);
-	cv::createTrackbar("Brightness", "Adjustments", &Brightness, 255);
-	cv::createTrackbar("Contrast", "Adjustments", &Contrast, 255);
-	cv::createTrackbar("Saturation", "Adjustments", &Saturation, 255);
-	cv::createTrackbar("Sharpness", "Adjustments", &Sharpness, 255);
-	cv::createTrackbar("Focus", "Adjustments", &Focus, 256);
 
 	fprintf(stdout, "Preparing to open camera.\n");
 
@@ -32,7 +24,24 @@ int main(int argc, char* argv[]) {
 	camera.GetContrast(Contrast);
 	camera.GetSaturation(Saturation);
 	camera.GetSharpness(Sharpness);
+	camera.GetGain(Gain);
+	camera.GetBacklightCompensation(BacklightCompensation);
+	camera.GetWhiteBalanceTemperature(WhiteBalanceTemperature);
+	++WhiteBalanceTemperature;
 	camera.GetFocus(Focus);
+	++Focus;
+
+	cv::namedWindow("Adjustments", CV_WINDOW_NORMAL);
+	cv::createTrackbar("Brightness", "Adjustments", &Brightness, 255);
+	cv::createTrackbar("Contrast", "Adjustments", &Contrast, 255);
+	cv::createTrackbar("Saturation", "Adjustments", &Saturation, 255);
+	cv::createTrackbar("Sharpness", "Adjustments", &Sharpness, 255);
+	cv::createTrackbar("Gain", "Adjustments", &Gain, 255);
+	cv::createTrackbar("Backlight Compensation", "Adjustments", &BacklightCompensation, 1);
+	
+	// Off by one to account for -1 being auto.
+	cv::createTrackbar("White Balance Temperature", "Adjustments", &WhiteBalanceTemperature, 6501);
+	cv::createTrackbar("Focus", "Adjustments", &Focus, 256);
 
 	int wait_key = 0;
 	while (true) {
@@ -40,6 +49,11 @@ int main(int argc, char* argv[]) {
 		camera.SetContrast(Contrast);
 		camera.SetSaturation(Saturation);
 		camera.SetSharpness(Sharpness);
+		camera.SetGain(Gain);
+		camera.SetBacklightCompensation(BacklightCompensation);
+		--WhiteBalanceTemperature;
+		camera.SetWhiteBalanceTemperature(WhiteBalanceTemperature);
+		++WhiteBalanceTemperature;
 		--Focus;
 		camera.SetFocus(Focus);
 		++Focus;
