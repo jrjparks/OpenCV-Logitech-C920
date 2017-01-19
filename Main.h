@@ -3,6 +3,7 @@
  *
  *  Created on: Dec 31, 2014
  *      Author: jrparks
+ *      Author: https://github.com/jrjparks
  */
 
 #ifndef MAIN_H_
