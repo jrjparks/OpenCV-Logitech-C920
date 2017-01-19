@@ -3,6 +3,7 @@
  *
  *  Created on: Dec 31, 2014
  *      Author: jrparks
+ *      Author: https://github.com/jrjparks
  *
  *  Based on OpenCV cap_v4l.cpp
  */
